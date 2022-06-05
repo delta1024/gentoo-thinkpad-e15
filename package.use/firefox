@@ -1,0 +1,3 @@
+#>=media-plugins/alsa-pligins-1.2.6 pulseaudio
+
+=media-sound/mpg123-1.29.3 -pulseaudio
