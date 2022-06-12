@@ -1,0 +1,34 @@
+--- dhcpcd-hooks/99-openrc	2015-05-06 16:29:27.000000000 +0200
++++ dhcpcd-hooks/99-openrc	2014-09-13 20:32:44.000000000 +0200
+@@ -0,0 +1,17 @@
++# OpenRC hook
++
++: ${RC_SVCNAME:=dhcpcd}
++
++do_rc_service()
++{
++	if [ "$RC_SVCNAME" ]; then
++		IN_BACKGROUND=true /sbin/rc-service "$RC_SVCNAME" -- --quiet $@
++	fi
++}
++
++if $if_oneup && $if_ipwaited; then
++	# runscript needs to grow a --inactive command
++	do_rc_service start
++else
++	do_rc_service --ifstarted stop
++fi
+
+
+
+--- dhcpcd-hooks/Makefile	2014-12-19 11:45:45.000000000 +0100
++++ dhcpcd-hooks/Makefile	2015-05-06 20:31:52.000000000 +0200
+@@ -5,7 +5,7 @@
+ SCRIPTSDIR=	${LIBEXECDIR}/dhcpcd-hooks
+ SCRIPTS=	01-test 02-dump
+ SCRIPTS+=	10-mtu 10-wpa_supplicant 15-timezone 20-resolv.conf
+-SCRIPTS+=	29-lookup-hostname 30-hostname
++SCRIPTS+=	29-lookup-hostname 30-hostname 99-openrc
+ SCRIPTS+=	${HOOKSCRIPTS}
+ 
+ 50-ypbind: 50-ypbind.in
